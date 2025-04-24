@@ -1,0 +1,80 @@
+<?php
+// Create a blank image
+$width = 600;
+$height = 400;
+$image = imagecreatetruecolor($width, $height);
+
+// Set background color (light blue)
+$bg_color = imagecolorallocate($image, 235, 245, 251);
+imagefill($image, 0, 0, $bg_color);
+
+// Colors
+$dark_blue = imagecolorallocate($image, 52, 152, 219);
+$light_blue = imagecolorallocate($image, 133, 193, 233);
+$white = imagecolorallocate($image, 255, 255, 255);
+$gray = imagecolorallocate($image, 127, 140, 141);
+$dark_gray = imagecolorallocate($image, 44, 62, 80);
+
+// Draw ballot box
+$box_x = $width/2 - 75;
+$box_y = $height/2 - 50;
+$box_width = 150;
+$box_height = 120;
+imagefilledrectangle($image, $box_x, $box_y, $box_x + $box_width, $box_y + $box_height, $dark_blue);
+imagefilledrectangle($image, $box_x + 5, $box_y + 5, $box_x + $box_width - 5, $box_y + $box_height - 5, $light_blue);
+
+// Draw slot on top
+$slot_width = 80;
+$slot_height = 10;
+$slot_x = $box_x + ($box_width - $slot_width) / 2;
+$slot_y = $box_y;
+imagefilledrectangle($image, $slot_x, $slot_y - $slot_height, $slot_x + $slot_width, $slot_y, $dark_gray);
+
+// Draw ballot paper
+$paper_width = 60;
+$paper_height = 80;
+$paper_x = $box_x + $box_width + 20;
+$paper_y = $box_y + 20;
+imagefilledrectangle($image, $paper_x, $paper_y, $paper_x + $paper_width, $paper_y + $paper_height, $white);
+
+// Draw lines on ballot paper
+for($i = 1; $i <= 4; $i++) {
+    $line_y = $paper_y + $i * 15;
+    imageline($image, $paper_x + 10, $line_y, $paper_x + $paper_width - 10, $line_y, $gray);
+}
+
+// Draw checkmark on ballot
+$check_x = $paper_x + 15;
+$check_y = $paper_y + 30;
+imageline($image, $check_x, $check_y, $check_x + 10, $check_y + 10, $dark_blue);
+imageline($image, $check_x + 10, $check_y + 10, $check_x + 25, $check_y - 10, $dark_blue);
+
+// Draw computer/device
+$device_width = 120;
+$device_height = 90;
+$device_x = $box_x - $device_width - 20;
+$device_y = $box_y + 15;
+imagefilledrectangle($image, $device_x, $device_y, $device_x + $device_width, $device_y + $device_height, $dark_gray);
+imagefilledrectangle($image, $device_x + 5, $device_y + 5, $device_x + $device_width - 5, $device_y + $device_height - 15, $light_blue);
+
+// Draw stand for device
+$stand_width = 40;
+$stand_height = 20;
+$stand_x = $device_x + ($device_width - $stand_width) / 2;
+$stand_y = $device_y + $device_height;
+imagefilledrectangle($image, $stand_x, $stand_y, $stand_x + $stand_width, $stand_y + $stand_height, $dark_gray);
+
+// Add text
+$text = "Online Voting System";
+$font_size = 5;
+$text_width = imagefontwidth($font_size) * strlen($text);
+$text_height = imagefontheight($font_size);
+$text_x = ($width - $text_width) / 2;
+$text_y = $height - 40;
+imagestring($image, $font_size, $text_x, $text_y, $text, $dark_blue);
+
+// Output the image
+header('Content-Type: image/png');
+imagepng($image);
+imagedestroy($image);
+?>

@@ -1,0 +1,34 @@
+<?php
+// Create a blank image
+$width = 300;
+$height = 300;
+$image = imagecreatetruecolor($width, $height);
+
+// Set background color (light gray)
+$bg_color = imagecolorallocate($image, 240, 240, 240);
+imagefill($image, 0, 0, $bg_color);
+
+// Set text color (dark gray)
+$text_color = imagecolorallocate($image, 80, 80, 80);
+
+// Draw a silhouette
+$silhouette_color = imagecolorallocate($image, 200, 200, 200);
+// Head
+imagefilledellipse($image, $width/2, $height/2 - 30, 120, 120, $silhouette_color);
+// Body
+imagefilledrectangle($image, $width/2 - 50, $height/2 + 30, $width/2 + 50, $height, $silhouette_color);
+
+// Add text
+$text = "Candidate Photo";
+$font_size = 5;
+$text_width = imagefontwidth($font_size) * strlen($text);
+$text_height = imagefontheight($font_size);
+$text_x = ($width - $text_width) / 2;
+$text_y = $height - 20;
+imagestring($image, $font_size, $text_x, $text_y, $text, $text_color);
+
+// Output the image
+header('Content-Type: image/jpeg');
+imagejpeg($image, null, 90);
+imagedestroy($image);
+?>
