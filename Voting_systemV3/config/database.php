@@ -1,5 +1,6 @@
 <?php
 // Database configuration
+// sdfgsfdfgsdfgsdf
 $host = "localhost";
 $dbname = "voting_system";
 $username = "root";
